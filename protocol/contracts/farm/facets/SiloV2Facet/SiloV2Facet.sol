@@ -22,13 +22,13 @@ contract SiloV2Facet is TokenSilo {
      * Generic
      */
 
-    function deposit(bool partialUpdateSilo, address token, uint256 amount) external {
-        IERC20(token).transferFrom(msg.sender, address(this), amount);
-        _deposit(partialUpdateSilo, token, amount);
+    function deposit(address token, uint256 amount, UpdateSettings calldata settings) external {
+        if (!settings.toInternalBalance) IERC20(token).transferFrom(msg.sender, address(this), amount);
+        else LibUserBalance._increaseInternalBalance(msg.sender, IERC20(token), amount);
+        _deposit(token, amount, settings.partialUpdateSilo);
     }
 
-    function withdraw(bool partialUpdateSilo, address token, uint32[] calldata seasons, uint256[] calldata amounts) 
-        public {
+    function withdraw(address token, uint32[] calldata seasons, uint256[] calldata amounts, bool partialUpdateSilo) public {
         _withdraw(partialUpdateSilo, token, seasons, amounts);
     }
 
@@ -38,8 +38,9 @@ contract SiloV2Facet is TokenSilo {
         }
     }
     
-    function claimWithdrawal(address token, uint32 season) public returns (uint256 amount) {
+    function claimWithdrawal(address token, uint32 season, bool fromInternalBalance) public returns (uint256 amount) {
         amount = removeTokenWithdrawal(msg.sender, token, season);
+        if (fromInternalBalance) 
         IERC20(token).transfer(msg.sender, amount);
         emit ClaimWithdrawal(msg.sender, token, season, amount);
     }

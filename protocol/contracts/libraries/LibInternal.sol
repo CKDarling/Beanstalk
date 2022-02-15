@@ -50,9 +50,9 @@ library LibInternal {
 
     function updateSilo(bool partialUpdateSilo, address account) internal {
         DiamondStorage storage ds = diamondStorage();
-        bytes4 functionSelector = bytes4(keccak256("updateSilo(bool,address)"));
+        bytes4 functionSelector = bytes4(keccak256("updateSilo(address,bool)"));
         address facet = ds.selectorToFacetAndPosition[functionSelector].facetAddress;
-        bytes memory myFunctionCall = abi.encodeWithSelector(functionSelector, partialUpdateSilo, account);
+        bytes memory myFunctionCall = abi.encodeWithSelector(functionSelector, account, partialUpdateSilo);
         (bool success,) = address(facet).delegatecall(myFunctionCall);
         require(success, "Silo: updateSilo failed.");
     }
