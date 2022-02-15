@@ -48,7 +48,7 @@ library LibInternal {
         uint256 minEthAmount;
     }
 
-    function updateSilo(bool partialUpdateSilo, address account) internal {
+    function updateSilo(address account, bool partialUpdateSilo) internal {
         DiamondStorage storage ds = diamondStorage();
         bytes4 functionSelector = bytes4(keccak256("updateSilo(address,bool)"));
         address facet = ds.selectorToFacetAndPosition[functionSelector].facetAddress;
