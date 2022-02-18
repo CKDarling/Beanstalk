@@ -13,8 +13,6 @@ interface IMeta3Curve {
     function totalSupply() external view returns (uint256);
 }
 
-
-
 interface IDepositZapCurve {
     function add_liquidity(uint256[] calldata amounts, uint256 min_mint_amount) external returns (uint256);
     function remove_liquidity_one_coin(uint256 _token_amount, int128 i, uint256 min_amount) external returns (uint256);
