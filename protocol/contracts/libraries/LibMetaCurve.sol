@@ -62,11 +62,11 @@ library LibMetaCurve {
         internal
         returns (uint256 coin_amount_received) 
     {
-        IDepositZapCurve(POOL).remove_liquidity_one_coin(_token_amount, i, min_amount);
+        coin_amount_received = IDepositZapCurve(POOL).remove_liquidity_one_coin(_token_amount, i, min_amount);
     }
 
-    function addLiquidity(uint256[] calldata amounts, uint256 min_mint_amount) internal returns (uint256) {
-        IDepositZapCurve(POOL).add_liquidity(amounts, min_mint_amount);
+    function addLiquidity(uint256[] calldata amounts, uint256 min_mint_amount) internal returns (uint256 lp_added) {
+        lp_added = IDepositZapCurve(POOL).add_liquidity(amounts, min_mint_amount);
     }
     
     function getPrice(uint256[2] memory balances, uint256[2] memory rates) private view returns (uint) {
